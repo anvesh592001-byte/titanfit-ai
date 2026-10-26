@@ -1,0 +1,373 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================================
+   TITANFIT AI — DESIGN SYSTEM
+   Direction: glassmorphism surfaces + crimson red + violet accents.
+   Layering notes:
+   - Tokens live in @layer base.
+   - The "design layer" at the bottom is intentionally UNLAYERED so it wins
+     over the flat utility combinations already used across the app
+     (e.g. `bg-crimson-600`, `border-zinc-300` buttons, card shells).
+   - No `backdrop-filter` is used on generic cards: several modals/drawers
+     are `position: fixed` and must not sit inside a filtered ancestor.
+   ========================================================================= */
+
+@layer base {
+  :root {
+    color-scheme: light;
+
+    --bg-primary: #f5f4fb;
+    --bg-surface: rgba(255, 255, 255, 0.78);
+    --bg-elevated: rgba(255, 255, 255, 0.92);
+    --text-primary: #0b0b13;
+    --text-muted: #55555f;
+    --border-subtle: rgba(15, 15, 35, 0.1);
+    --accent-red: #dc2626;
+    --accent-violet: #7c3aed;
+
+    /* Glass surfaces */
+    --glass-bg: linear-gradient(
+      165deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.74) 55%,
+      rgba(248, 247, 255, 0.82) 100%
+    );
+    --glass-border: rgba(18, 16, 40, 0.1);
+    --glass-inner: rgba(255, 255, 255, 0.85);
+    --glass-shadow: 0 24px 48px -30px rgba(24, 16, 60, 0.45),
+      0 2px 10px -6px rgba(24, 16, 60, 0.2);
+
+    /* Form fields */
+    --field-bg: rgba(255, 255, 255, 0.82);
+    --field-border: rgba(18, 16, 40, 0.14);
+    --field-bg-hover: rgba(255, 255, 255, 0.98);
+
+    --focus-ring: #7c3aed;
+    --ring-glow: rgba(124, 58, 237, 0.18);
+
+    --gradient-brand: linear-gradient(
+      135deg,
+      #f43f5e 0%,
+      #dc2626 46%,
+      #7c3aed 150%
+    );
+
+    /* Ambient background glows */
+    --bg-image: radial-gradient(
+        58rem 40rem at 6% -14%,
+        rgba(124, 58, 237, 0.18),
+        transparent 62%
+      ),
+      radial-gradient(
+        50rem 34rem at 108% 4%,
+        rgba(220, 38, 38, 0.16),
+        transparent 58%
+      ),
+      radial-gradient(
+        46rem 32rem at 50% 118%,
+        rgba(124, 58, 237, 0.12),
+        transparent 64%
+      );
+  }
+
+  .dark {
+    color-scheme: dark;
+
+    --bg-primary: #07060c;
+    --bg-surface: rgba(18, 17, 26, 0.78);
+    --bg-elevated: rgba(24, 23, 34, 0.92);
+    --text-primary: #f4f4f6;
+    --text-muted: #a3a3ae;
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --accent-red: #ef4444;
+    --accent-violet: #8b5cf6;
+
+    --glass-bg: linear-gradient(
+      165deg,
+      rgba(30, 28, 44, 0.86) 0%,
+      rgba(17, 16, 26, 0.82) 55%,
+      rgba(20, 17, 32, 0.86) 100%
+    );
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-inner: rgba(255, 255, 255, 0.06);
+    --glass-shadow: 0 28px 56px -32px rgba(0, 0, 0, 0.85),
+      0 2px 12px -6px rgba(0, 0, 0, 0.6);
+
+    --field-bg: rgba(12, 11, 19, 0.78);
+    --field-border: rgba(255, 255, 255, 0.12);
+    --field-bg-hover: rgba(20, 18, 30, 0.95);
+
+    --focus-ring: #a78bfa;
+    --ring-glow: rgba(167, 139, 250, 0.22);
+
+    --bg-image: radial-gradient(
+        58rem 40rem at 6% -14%,
+        rgba(124, 58, 237, 0.3),
+        transparent 62%
+      ),
+      radial-gradient(
+        50rem 34rem at 108% 4%,
+        rgba(220, 38, 38, 0.24),
+        transparent 58%
+      ),
+      radial-gradient(
+        46rem 32rem at 50% 118%,
+        rgba(139, 92, 246, 0.2),
+        transparent 64%
+      );
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    background-image: var(--bg-image);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(124, 58, 237, 0.28);
+    color: inherit;
+  }
+
+  /* Accessible keyboard focus ring — violet, tuned per theme */
+  *:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+/* =========================================================================
+   DESIGN LAYER (unlayered on purpose — see header comment)
+   ========================================================================= */
+
+/* ---------- 1. Ambient scrollbars ---------- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(220, 38, 38, 0.55),
+    rgba(124, 58, 237, 0.55)
+  );
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ef4444, #8b5cf6);
+  background-clip: padding-box;
+}
+
+/* ---------- 2. Primary action surfaces (crimson → violet) ---------- */
+.bg-crimson-600 {
+  background-image: var(--gradient-brand);
+  box-shadow: 0 12px 26px -14px rgba(220, 38, 38, 0.8),
+    0 6px 22px -14px rgba(124, 58, 237, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  transition: filter 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+button.bg-crimson-600:hover:not(:disabled),
+a.bg-crimson-600:hover {
+  filter: brightness(1.09) saturate(1.06);
+  box-shadow: 0 16px 32px -14px rgba(220, 38, 38, 0.9),
+    0 10px 30px -14px rgba(124, 58, 237, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+button.bg-crimson-600:active:not(:disabled) {
+  transform: translateY(1px);
+  filter: brightness(0.96);
+}
+
+button.bg-crimson-600:disabled {
+  filter: saturate(0.45) brightness(0.95);
+  box-shadow: none;
+}
+
+/* ---------- 3. Secondary / outline buttons → frosted glass ---------- */
+button.border-zinc-300,
+button.border-zinc-200 {
+  background-color: var(--field-bg);
+  border-color: var(--field-border);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease,
+    background-color 0.18s ease, transform 0.18s ease;
+}
+
+.dark button.border-zinc-300,
+.dark button.border-zinc-200 {
+  background-color: rgba(22, 21, 32, 0.8);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+button.border-zinc-300:hover:not(:disabled),
+button.border-zinc-200:hover:not(:disabled) {
+  background-color: var(--field-bg-hover);
+  border-color: rgba(124, 58, 237, 0.55);
+  box-shadow: 0 0 0 3px var(--ring-glow),
+    0 8px 18px -14px rgba(124, 58, 237, 0.9);
+}
+
+.dark button.border-zinc-300:hover:not(:disabled),
+.dark button.border-zinc-200:hover:not(:disabled) {
+  background-color: rgba(30, 28, 44, 0.95);
+  border-color: rgba(167, 139, 250, 0.6);
+}
+
+button.border-zinc-300:active:not(:disabled),
+button.border-zinc-200:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* ---------- 4. Glass cards (standard rounded shells) ---------- */
+div.rounded-2xl.border,
+div.rounded-3xl.border,
+section.rounded-2xl.border,
+section.rounded-3xl.border,
+aside.rounded-2xl.border,
+aside.rounded-3xl.border {
+  background-image: var(--glass-bg);
+  background-color: transparent;
+  border-color: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Hairline highlight along the top edge of every glass card */
+div.rounded-2xl.border::before,
+div.rounded-3xl.border::before,
+section.rounded-2xl.border::before,
+section.rounded-3xl.border::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.65),
+    rgba(167, 139, 250, 0.5),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Only cards that establish their own stacking context get the highlight */
+div.rounded-2xl.border,
+div.rounded-3xl.border,
+section.rounded-2xl.border,
+section.rounded-3xl.border {
+  position: relative;
+}
+
+/* ---------- 5. Form controls → frosted fields ---------- */
+input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+select,
+textarea {
+  background-color: var(--field-bg);
+  border-color: var(--field-border);
+  color: var(--text-primary);
+  transition: border-color 0.16s ease, box-shadow 0.16s ease,
+    background-color 0.16s ease;
+}
+
+input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):hover,
+select:hover,
+textarea:hover {
+  border-color: rgba(124, 58, 237, 0.4);
+  background-color: var(--field-bg-hover);
+}
+
+input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(124, 58, 237, 0.75);
+  box-shadow: 0 0 0 3px var(--ring-glow);
+  outline: none;
+  background-color: var(--field-bg-hover);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.72;
+}
+
+/* Number input spinners */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  opacity: 0.45;
+}
+input[type='number']:hover::-webkit-outer-spin-button,
+input[type='number']:hover::-webkit-inner-spin-button {
+  opacity: 0.9;
+}
+
+/* ---------- 6. Utility classes for the new system ---------- */
+@layer components {
+  .grad-text {
+    background: linear-gradient(100deg, #f43f5e 0%, #dc2626 40%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-semibold tracking-wide transition-all;
+    background-color: var(--field-bg);
+    border-color: var(--field-border);
+  }
+
+  .chip:hover {
+    border-color: rgba(124, 58, 237, 0.55);
+    box-shadow: 0 0 0 3px var(--ring-glow);
+  }
+
+  .section-title {
+    @apply text-lg font-bold tracking-tight text-zinc-950 dark:text-white;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-bold uppercase tracking-[0.18em];
+    background: linear-gradient(90deg, #ef4444, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* ---------- 7. Ambient keyframes ---------- */
+@keyframes titan-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: titan-rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
